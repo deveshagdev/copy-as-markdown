@@ -56,4 +56,4 @@ this file will be updated with a new date.
 ## Contact
 
 Questions or concerns: please open an issue at
-https://github.com/GITHUB_USERNAME/copy-as-markdown/issues
+https://github.com/deveshagdev/copy-as-markdown/issues
