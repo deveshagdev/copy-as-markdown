@@ -200,6 +200,35 @@
     }
   }
 
+  // Compares heading text loosely: emphasis markers, link syntax and casing all
+  // differ between <title> and an <h1> that say the same thing.
+  function normalizeHeading(text) {
+    return text
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/[*_`\\]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+  }
+
+  // Most pages repeat their title in an <h1>, and <title> usually adds a site
+  // suffix ("Lorem ipsum - Wikipedia"). Emitting both gives two headings in a
+  // row on almost every page.
+  function duplicatesLeadingHeading(title, markdown) {
+    const firstLine = markdown.trimStart().split("\n", 1)[0];
+    const heading = firstLine.match(/^#{1,6}\s+(.*)$/);
+    if (!heading) return false;
+
+    const headingText = normalizeHeading(heading[1]);
+    const titleText = normalizeHeading(title);
+    if (!headingText || !titleText.startsWith(headingText)) return false;
+
+    // Only treat the leftover as a site suffix, so "Lorem ipsum generator" is
+    // not mistaken for a duplicate of "Lorem ipsum".
+    const remainder = titleText.slice(headingText.length).trim();
+    return remainder === "" || /^[-–—|:·•]/.test(remainder);
+  }
+
   function getMarkdownForPage() {
     // Prefer <main> or <article> if the page has one — usually the real content,
     // skipping nav bars, sidebars, footers, cookie banners, etc.
@@ -211,8 +240,10 @@
     const container = extractVisibleContent(main);
     absolutizeUrls(container);
 
-    const title = document.title ? `# ${document.title}\n\n` : "";
-    return title + turndownService.turndown(container.innerHTML);
+    const body = turndownService.turndown(container.innerHTML);
+    const title = document.title.trim();
+    if (!title || duplicatesLeadingHeading(title, body)) return body;
+    return `# ${title}\n\n${body}`;
   }
 
   function extract() {

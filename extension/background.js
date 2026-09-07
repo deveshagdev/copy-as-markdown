@@ -24,21 +24,28 @@ async function flashBadge(tabId, text, color) {
   setTimeout(() => chrome.action.setBadgeText({ tabId, text: "" }), 2000);
 }
 
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (!tab || tab.id === undefined) return;
-
-  await chrome.action.setBadgeText({ tabId: tab.id, text: "" });
+async function copyFromTab(tabId) {
+  await chrome.action.setBadgeText({ tabId, text: "" });
   try {
-    // Injecting per click rather than declaring a content script keeps this
-    // working after an extension update — a pre-injected script is orphaned by
-    // the reload and silently stops receiving messages until the tab reloads.
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: SCRIPTS });
+    // Injecting per invocation rather than declaring a content script keeps
+    // this working after an extension update — a pre-injected script is
+    // orphaned by the reload and silently stops responding until a tab reload.
+    await chrome.scripting.executeScript({ target: { tabId }, files: SCRIPTS });
     const [{ result }] = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+      target: { tabId },
       func: () => window.__copyAsMarkdown.copy()
     });
-    await flashBadge(tab.id, result.ok ? "✓" : "!", result.ok ? "#1a7f37" : "#c62828");
+    await flashBadge(tabId, result.ok ? "✓" : "!", result.ok ? "#1a7f37" : "#c62828");
   } catch {
-    await flashBadge(tab.id, "!", "#c62828");
+    await flashBadge(tabId, "!", "#c62828");
   }
+}
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (tab && tab.id !== undefined) copyFromTab(tab.id);
+});
+
+// Both the shortcut and the menu item grant activeTab for the current tab.
+chrome.commands.onCommand.addListener((command, tab) => {
+  if (command === "copy-as-markdown" && tab && tab.id !== undefined) copyFromTab(tab.id);
 });

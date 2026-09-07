@@ -20,5 +20,14 @@
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "commands": {
+    "copy-as-markdown": {
+      "suggested_key": {
+        "default": "Alt+Shift+M",
+        "mac": "Alt+Shift+M"
+      },
+      "description": "Copy the page or selection as Markdown"
+    }
   }
 }

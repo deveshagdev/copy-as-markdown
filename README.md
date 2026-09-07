@@ -38,6 +38,9 @@ nav menu.
   bare `<pre>` with no `<code>` inside, and longer fences when the code itself
   contains backticks
 - Strikethrough, sub/sup, definition lists, nested lists, blockquotes
+- **The page title and its heading de-duplicated**, so a page called
+  "Lorem ipsum - Wikipedia" whose `<h1>` is "Lorem ipsum" doesn't start with the
+  same heading twice
 
 ## Install
 
@@ -54,7 +57,9 @@ folder should ever ship.
 
 ## Usage
 
-Click the toolbar icon, or right-click the page and choose **Copy as Markdown**.
+Click the toolbar icon, press **Alt+Shift+M**, or right-click the page and
+choose **Copy as Markdown**. The shortcut can be changed at
+`chrome://extensions/shortcuts`.
 
 One action, not two: if you have something selected it copies the selection,
 otherwise it copies the whole page. The popup tells you which it did; the
