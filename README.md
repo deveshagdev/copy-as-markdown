@@ -44,16 +44,26 @@ nav menu.
 
 ## Install
 
-Not yet on the Chrome Web Store. To run it locally:
+Not on the Chrome Web Store yet, so installation is manual for now. Works in
+Chrome, Edge, Brave, Opera and any other Chromium browser.
 
-1. Clone or download this repository
-2. Open `chrome://extensions`
-3. Turn on **Developer mode** (top right)
-4. Click **Load unpacked** and select the **`extension/`** folder
+1. Download `copy-as-markdown-v1.0.0.zip` from the
+   [latest release](https://github.com/deveshagdev/copy-as-markdown/releases/latest)
+2. **Unzip it** — put the folder somewhere you're happy to leave it, because
+   deleting it uninstalls the extension
+3. Open `chrome://extensions` (or `edge://extensions`)
+4. Turn on **Developer mode**, top right
+5. Click **Load unpacked** and select the unzipped folder
 
-Point it at `extension/`, not the repository root — Chrome refuses to load an
-unpacked extension containing files whose names begin with `_`, and only that
-folder should ever ship.
+Your browser will warn about developer-mode extensions and may repeat the
+warning at startup. That's expected for anything not installed from a store —
+it isn't specific to this extension. There are no automatic updates, so to
+upgrade, download the new release and repeat the steps.
+
+If you'd rather install from the source tree, clone the repo and point
+**Load unpacked** at the `extension/` folder specifically, not the repository
+root — Chromium refuses to load an unpacked extension containing files whose
+names begin with `_`.
 
 ## Usage
 
