@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Edge Cases</title>
+</head>
+<body>
+<!-- No <main> and no <article>: page mode must fall back to <body>. -->
+
+<section data-case="headings">
+  <h1>H1</h1><h2>H2</h2><h3>H3</h3><h4>H4</h4><h5>H5</h5><h6>H6</h6>
+</section>
+
+<section data-case="inline">
+  <p><strong>bold</strong> <em>italic</em> <code>code</code> <del>struck</del>
+     <ins>inserted</ins> H<sub>2</sub>O x<sup>2</sup> <mark>marked</mark></p>
+</section>
+
+<section data-case="escaping">
+  <p>Literal asterisks *not bold* and underscores _not italic_ and a #hash
+     and [brackets] and a pipe | and a backslash \ here.</p>
+</section>
+
+<section data-case="inline-code-with-backtick">
+  <p>Use <code>a ` b</code> and <code>``double``</code> in text.</p>
+</section>
+
+<section data-case="pre-without-code">
+  <pre>plain preformatted
+  indented line</pre>
+</section>
+
+<section data-case="code-lang-variants">
+  <pre><code class="language-python">def f():
+    return 1</code></pre>
+  <pre><code class="lang-ruby">puts 1</code></pre>
+  <pre><code>no language</code></pre>
+</section>
+
+<section data-case="links">
+  <p><a href="https://x.com/a">normal</a>, <a href="/rel">relative</a>,
+     <a href="#frag">fragment</a>, <a>no href</a>,
+     <a href="mailto:a@b.com">mail</a>, <a href="https://x.com" title="T">titled</a></p>
+</section>
+
+<section data-case="images">
+  <img src="https://x.com/a.png" alt="with alt" />
+  <img src="/rel.png" />
+  <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="tiny" />
+  <picture><source srcset="/a.webp" type="image/webp"><img src="/a.jpg" alt="picture"></picture>
+</section>
+
+<section data-case="lists">
+  <ul><li>a<ul><li>b<ul><li>c</li></ul></li></ul></li></ul>
+  <ol start="3"><li>three</li><li>four</li></ol>
+  <ul><li><p>para in li</p><p>second para</p></li></ul>
+</section>
+
+<section data-case="definition-list">
+  <dl><dt>Term</dt><dd>Definition</dd><dt>Other</dt><dd>Second</dd></dl>
+</section>
+
+<section data-case="blockquote-nested">
+  <blockquote><p>outer</p><blockquote><p>inner</p></blockquote></blockquote>
+</section>
+
+<section data-case="breaks">
+  <p>line one<br>line two<br />line three</p>
+  <hr />
+</section>
+
+<section data-case="table-header-column">
+  <table><tr><th>Name</th><td>Ada</td></tr><tr><th>Role</th><td>Engineer</td></tr></table>
+</section>
+
+<section data-case="table-single-row">
+  <table><tr><td>only</td><td>row</td></tr></table>
+</section>
+
+<section data-case="table-with-block-content">
+  <table><thead><tr><th>Col</th></tr></thead>
+    <tbody><tr><td><p>para</p><ul><li>item</li></ul></td></tr></tbody></table>
+</section>
+
+<section data-case="table-caption">
+  <table><caption>The caption</caption><tr><th>H</th></tr><tr><td>v</td></tr></table>
+</section>
+
+<section data-case="unicode">
+  <p>Emoji 🎉 — em dash, café, 日本語, नमस्ते, <span dir="rtl">مرحبا</span></p>
+</section>
+
+<section data-case="empty-and-whitespace">
+  <p></p><div></div><span>   </span><p>after empties</p>
+</section>
+
+<section data-case="media">
+  <video src="/v.mp4" controls></video>
+  <audio src="/a.mp3" controls></audio>
+  <iframe src="https://example.com" title="frame"></iframe>
+  <svg width="20" height="20"><circle cx="10" cy="10" r="8" /></svg>
+</section>
+
+<section data-case="details">
+  <details><summary>Closed summary</summary><p>HIDDEN DETAILS BODY</p></details>
+  <details open><summary>Open summary</summary><p>visible details body</p></details>
+</section>
+
+<section data-case="shadow-host">
+  <div id="shadow-host"></div>
+</section>
+
+<section data-case="lazy-images">
+  <img data-src="/lazy.png" alt="lazy not loaded" />
+  <img src="/real.png" loading="lazy" alt="lazy real" />
+</section>
+
+<script>
+  // Web component content lives in a shadow root, which innerHTML cannot see.
+  const host = document.getElementById("shadow-host");
+  const root = host.attachShadow({ mode: "open" });
+  root.innerHTML = "<p>SHADOW DOM CONTENT</p>";
+</script>
+
+<script src="stub.js"></script>
+<script src="../extension/turndown.js"></script>
+<script src="../extension/content.js"></script>
+</body>
+</html>

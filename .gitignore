@@ -1,0 +1,7 @@
+# Packaged extension for store upload
+*.zip
+
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store

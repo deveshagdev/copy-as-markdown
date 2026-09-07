@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Complex Page — Tables, Code, Images</title>
+</head>
+<body>
+  <nav id="site-nav">
+    <a href="/">Home</a> | <a href="/docs">Docs</a> | <a href="/blog">Blog</a>
+    <p>NAV NOISE THAT SHOULD NOT BE COPIED</p>
+  </nav>
+
+  <div class="cookie-banner">
+    <p>We use cookies. COOKIE NOISE THAT SHOULD NOT BE COPIED.</p>
+    <button>Accept all</button>
+  </div>
+
+  <main>
+    <!-- UI furniture that lives inside <main> on real sites (e.g. Wikipedia) -->
+    <nav class="page-tools">
+      <a href="/edit">Edit</a> | <a href="/history">View history</a>
+      <p>IN-MAIN NAV NOISE THAT SHOULD NOT BE COPIED</p>
+    </nav>
+    <div class="dropdown" style="display: none">
+      <p>COLLAPSED DROPDOWN NOISE THAT SHOULD NOT BE COPIED</p>
+      <ul><li><a href="/de">Deutsch</a></li><li><a href="/fr">Français</a></li></ul>
+    </div>
+    <div aria-hidden="true">ARIA-HIDDEN NOISE THAT SHOULD NOT BE COPIED</div>
+    <style>.hatnote{font-style:italic}.NOISE{color:red}</style>
+    <form><input type="search" /><button>Search</button></form>
+    <p style="visibility: hidden">INVISIBLE NOISE THAT SHOULD NOT BE COPIED</p>
+
+    <h1>Widget API Reference</h1>
+
+    <p>The <code>Widget</code> class is the main entry point. See the
+      <a href="https://example.com/docs/widgets">full documentation</a> or the
+      <a href="/guides/quickstart">quickstart guide</a> for more.</p>
+
+    <blockquote>
+      <p><strong>Note:</strong> This API is in beta and may change.</p>
+    </blockquote>
+
+    <h2>Installation</h2>
+    <pre><code class="language-bash">npm install widget-sdk
+cd my-project</code></pre>
+
+    <h2>Usage</h2>
+    <pre><code class="language-js">const w = new Widget({ color: "red" });
+if (w.ready &amp;&amp; w.size &gt; 10) {
+  w.render();
+}</code></pre>
+
+    <h2>Options</h2>
+    <table>
+      <thead>
+        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>color</code></td><td>string</td><td><code>"blue"</code></td><td>Fill color</td></tr>
+        <tr><td><code>size</code></td><td>number</td><td><code>10</code></td><td>Width in <em>pixels</em></td></tr>
+        <tr><td><code>onClick</code></td><td>function</td><td><code>null</code></td><td>Click <a href="/api/handlers">handler</a></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Screenshots</h2>
+    <p>An inline image with a relative path:</p>
+    <img src="/assets/widget-preview.png" alt="Widget preview" width="200" />
+    <p>And an absolute one:</p>
+    <img src="https://example.com/img/diagram.png" alt="Architecture diagram" />
+
+    <h2>Lifecycle</h2>
+    <ol>
+      <li>Construct the widget
+        <ul>
+          <li>Validate options</li>
+          <li>Allocate the canvas</li>
+        </ul>
+      </li>
+      <li>Mount it to the DOM</li>
+      <li>Render on each frame</li>
+    </ol>
+
+    <hr />
+
+    <section id="selectable">
+      <h2>Selectable Section</h2>
+      <p>This paragraph is <strong>inside</strong> the section used for the
+        selection test, and it links to <a href="https://example.com/x">example</a>.</p>
+      <ul>
+        <li>Selected item one</li>
+        <li>Selected item two</li>
+      </ul>
+    </section>
+  </main>
+
+  <aside>SIDEBAR NOISE THAT SHOULD NOT BE COPIED</aside>
+  <footer>
+    <p>FOOTER NOISE THAT SHOULD NOT BE COPIED &copy; 2026</p>
+  </footer>
+
+  <script src="stub.js"></script>
+  <script src="../extension/turndown.js"></script>
+  <script src="../extension/content.js"></script>
+</body>
+</html>
