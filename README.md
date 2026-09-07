@@ -108,3 +108,7 @@ node tools/make-icons.js
 
 HTML-to-Markdown conversion by [Turndown](https://github.com/mixmark-io/turndown)
 (MIT), vendored in `extension/turndown.js`.
+
+## License
+
+[MIT](LICENSE)
