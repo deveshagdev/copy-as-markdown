@@ -1,37 +1,57 @@
-# Publishes a GitHub release when a version tag (v1.2.3) is pushed.
-# The zip is built the same way as tools/package.ps1: the committed contents of
-# extension/, with manifest.json at the root, ready to upload to Edge Add-ons.
+# Publishes a GitHub release with the extension zip attached. Two ways to start it:
+#
+#   - Actions tab -> Release -> Run workflow (on main). Reads the version from
+#     extension/manifest.json, creates the vX.Y.Z tag on that commit, and
+#     publishes the release.
+#   - Pushing a vX.Y.Z tag. The tag must match the manifest version.
+#
+# Either way the release notes are that version's section of CHANGELOG.md, and
+# the zip is built like tools/package.ps1: the committed contents of extension/
+# with manifest.json at the root, ready to upload to Edge Add-ons.
 name: Release
 
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+# Two runs for the same commit must not race to create the same release.
+concurrency:
+  group: release-${{ github.sha }}
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check the tag matches the manifest version
+      - name: Work out the version and tag
         run: |
           version=$(jq -r .version extension/manifest.json)
-          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+          tag="v$version"
+
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "::error::Run this workflow on main, not $GITHUB_REF_NAME"
+              exit 1
+            fi
+            if gh release view "$tag" >/dev/null 2>&1 || git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+              echo "::error::$tag already exists. Bump the version in extension/manifest.json and add it to CHANGELOG.md first."
+              exit 1
+            fi
+          elif [ "$GITHUB_REF_NAME" != "$tag" ]; then
             echo "::error::Tag $GITHUB_REF_NAME does not match manifest version $version"
             exit 1
           fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
 
-      - name: Build the zip
-        run: |
-          zip="copy-as-markdown-$GITHUB_REF_NAME.zip"
-          git archive --format=zip --output "$zip" HEAD:extension
-          unzip -l "$zip"
-          unzip -l "$zip" | grep -q " manifest.json$" || { echo "::error::manifest.json is not at the zip root"; exit 1; }
-          echo "ZIP=$zip" >> "$GITHUB_ENV"
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "TAG=$tag" >> "$GITHUB_ENV"
+          echo "Releasing $tag from $GITHUB_SHA"
 
       - name: Take the release notes from CHANGELOG.md
         run: |
@@ -39,13 +59,25 @@ jobs:
             /^## / { found = ($2 == v); next }
             found { print }
           ' CHANGELOG.md > notes.md
-          if [ ! -s notes.md ]; then
+          if ! grep -q '[^[:space:]]' notes.md; then
             echo "::error::CHANGELOG.md has no section for $VERSION"
             exit 1
           fi
           cat notes.md
 
+      - name: Build the zip
+        run: |
+          zip="copy-as-markdown-$TAG.zip"
+          git archive --format=zip --output "$zip" HEAD:extension
+          unzip -l "$zip"
+          unzip -l "$zip" | grep -q " manifest.json$" || { echo "::error::manifest.json is not at the zip root"; exit 1; }
+          echo "ZIP=$zip" >> "$GITHUB_ENV"
+
       - name: Publish the release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" "$ZIP" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            # Creates the tag on this exact commit.
+            gh release create "$TAG" "$ZIP" --title "$TAG" --notes-file notes.md --target "$GITHUB_SHA"
+          else
+            gh release create "$TAG" "$ZIP" --title "$TAG" --notes-file notes.md --verify-tag
+          fi

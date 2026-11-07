@@ -102,12 +102,14 @@ tools/       icon, screenshot and packaging scripts
 
 1. Bump `version` in `extension/manifest.json` and add a matching section to
    [CHANGELOG.md](CHANGELOG.md)
-2. Merge to `main`, then tag that commit and push the tag:
-   `git tag v1.2.3 && git push origin v1.2.3`
+2. Merge to `main`
+3. On GitHub, open **Actions → Release → Run workflow** and run it on `main`
 
-The [release workflow](.github/workflows/release.yml) checks the tag matches
-the manifest version, builds the zip, and publishes a GitHub release with the
-changelog section as its notes. Upload the same zip to Edge Add-ons.
+The [release workflow](.github/workflows/release.yml) creates the `vX.Y.Z` tag
+from the manifest version, builds the zip, and publishes a GitHub release with
+the changelog section as its notes. It refuses to run if that version has
+already been released. Pushing a `vX.Y.Z` tag yourself also works. Upload the
+same zip to Edge Add-ons.
 
 ### Packaging locally
 
