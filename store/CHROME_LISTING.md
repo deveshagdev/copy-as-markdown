@@ -1,6 +1,7 @@
 # Chrome Web Store listing
 
-Copy-paste source for the Developer Dashboard. Nothing in this folder ships in
+Copy-paste source for the Developer Dashboard. Kept for later — the extension
+is published on Microsoft Edge Add-ons first (see `EDGE_LISTING.md`). Nothing in this folder ships in
 the extension zip — upload only the contents of `extension/`.
 
 ---

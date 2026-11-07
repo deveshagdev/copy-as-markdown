@@ -44,15 +44,22 @@ nav menu.
 
 ## Install
 
-Not on the Chrome Web Store yet, so installation is manual for now. Works in
-Chrome, Edge, Brave, Opera and any other Chromium browser.
+### Microsoft Edge
+
+Being published on [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons).
+Once it's live, install it from there and it will update automatically.
+
+### Chrome, Brave, Opera and other Chromium browsers (manual install)
+
+Not on the Chrome Web Store, so installation is manual. Edge users can do this
+too while the store listing is in review.
 
 1. Download `copy-as-markdown-v1.0.0.zip` from the
    [latest release](https://github.com/deveshagdev/copy-as-markdown/releases/latest)
 2. **Unzip it** — put the folder somewhere you're happy to leave it, because
    deleting it uninstalls the extension
 3. Open `chrome://extensions` (or `edge://extensions`)
-4. Turn on **Developer mode**, top right
+4. Turn on **Developer mode** (top right in Chrome, left sidebar in Edge)
 5. Click **Load unpacked** and select the unzipped folder
 
 Your browser will warn about developer-mode extensions and may repeat the
@@ -69,7 +76,7 @@ names begin with `_`.
 
 Click the toolbar icon, press **Alt+Shift+M**, or right-click the page and
 choose **Copy as Markdown**. The shortcut can be changed at
-`chrome://extensions/shortcuts`.
+`edge://extensions/shortcuts` (or `chrome://extensions/shortcuts`).
 
 One action, not two: if you have something selected it copies the selection,
 otherwise it copies the whole page. The popup tells you which it did; the
@@ -86,9 +93,25 @@ it to. See [PRIVACY.md](PRIVACY.md).
 
 ```
 extension/   the extension itself — this is what gets loaded and published
+store/       store listing copy and images — never part of the zip
 testbed/     test fixtures
-tools/       icon generator
+tools/       icon generator and packaging script
 ```
+
+### Packaging
+
+To build the zip for upload to Edge Add-ons:
+
+```bash
+# Windows
+powershell -ExecutionPolicy Bypass -File tools/package.ps1
+
+# macOS / Linux
+git archive --format=zip --output copy-as-markdown-v1.0.0.zip HEAD:extension
+```
+
+Both zip the committed contents of `extension/`, with `manifest.json` at the
+root. Uncommitted changes are not included.
 
 ### Tests
 
