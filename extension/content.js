@@ -214,12 +214,30 @@
   // Most pages repeat their title in an <h1>, and <title> usually adds a site
   // suffix ("Lorem ipsum - Wikipedia"). Emitting both gives two headings in a
   // row on almost every page.
+  // The first heading, not the first line: breadcrumbs and bylines often sit
+  // above the <h1>. Lines inside fenced code are skipped, so a "# comment" in a
+  // shell snippet is never mistaken for a heading.
+  function firstHeading(markdown) {
+    let fence = null;
+    for (const line of markdown.split("\n")) {
+      const marker = line.match(/^\s*(`{3,}|~{3,})/);
+      if (marker) {
+        if (!fence) fence = marker[1];
+        else if (marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null;
+        continue;
+      }
+      if (fence) continue;
+      const heading = line.match(/^#{1,6}\s+(.*)$/);
+      if (heading) return heading[1];
+    }
+    return null;
+  }
+
   function duplicatesLeadingHeading(title, markdown) {
-    const firstLine = markdown.trimStart().split("\n", 1)[0];
-    const heading = firstLine.match(/^#{1,6}\s+(.*)$/);
+    const heading = firstHeading(markdown);
     if (!heading) return false;
 
-    const headingText = normalizeHeading(heading[1]);
+    const headingText = normalizeHeading(heading);
     const titleText = normalizeHeading(title);
     if (!headingText || !titleText.startsWith(headingText)) return false;
 

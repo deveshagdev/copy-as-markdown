@@ -106,9 +106,14 @@ Copy any page or selection as clean Markdown, without navigation menus, banners 
 
 **Large promotional tile** (optional, 1400×560): skip it.
 
-**Screenshots** (optional but strongly recommended; 640×480 or 1280×800, up
-to 10): see the suggestions in `CHROME_LISTING.md` — they apply unchanged. Take
-them in Edge so the browser UI matches the store.
+**Screenshots** (upload all three, in this order): `store/screenshots/`
+
+1. `1-popup-1280x800.png` — the popup after copying a page
+2. `2-before-after-1280x800.png` — the page beside the Markdown it produces
+3. `3-selection-menu-1280x800.png` — copying a selection from the right-click menu
+
+Regenerate with `node tools/screenshots/make-screenshots.js`. The article is
+original demo content and the Markdown shown is the extension's real output.
 
 **Search terms** (up to 7 terms, 30 characters each, 21 words in total)
 

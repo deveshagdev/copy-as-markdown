@@ -95,7 +95,7 @@ it to. See [PRIVACY.md](PRIVACY.md).
 extension/   the extension itself — this is what gets loaded and published
 store/       store listing copy and images — never part of the zip
 testbed/     test fixtures
-tools/       icon generator and packaging script
+tools/       icon, screenshot and packaging scripts
 ```
 
 ### Packaging
