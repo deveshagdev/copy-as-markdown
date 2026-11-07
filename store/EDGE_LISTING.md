@@ -10,7 +10,7 @@ Registering as an Edge Add-ons developer is free.
 
 ## 1. Packages
 
-Upload `copy-as-markdown-v1.0.0.zip`. Partner Center reads the name, version,
+Upload the zip from the latest GitHub release (`copy-as-markdown-v1.0.1.zip`). Partner Center reads the name, version,
 description and permissions from `manifest.json`, so there is nothing to type
 on this page.
 

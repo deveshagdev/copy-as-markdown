@@ -54,7 +54,7 @@ Once it's live, install it from there and it will update automatically.
 Not on the Chrome Web Store, so installation is manual. Edge users can do this
 too while the store listing is in review.
 
-1. Download `copy-as-markdown-v1.0.0.zip` from the
+1. Download the `copy-as-markdown-v….zip` file from the
    [latest release](https://github.com/deveshagdev/copy-as-markdown/releases/latest)
 2. **Unzip it** — put the folder somewhere you're happy to leave it, because
    deleting it uninstalls the extension
@@ -98,16 +98,27 @@ testbed/     test fixtures
 tools/       icon, screenshot and packaging scripts
 ```
 
-### Packaging
+### Releasing
 
-To build the zip for upload to Edge Add-ons:
+1. Bump `version` in `extension/manifest.json` and add a matching section to
+   [CHANGELOG.md](CHANGELOG.md)
+2. Merge to `main`, then tag that commit and push the tag:
+   `git tag v1.2.3 && git push origin v1.2.3`
+
+The [release workflow](.github/workflows/release.yml) checks the tag matches
+the manifest version, builds the zip, and publishes a GitHub release with the
+changelog section as its notes. Upload the same zip to Edge Add-ons.
+
+### Packaging locally
+
+To build the zip yourself:
 
 ```bash
 # Windows
 powershell -ExecutionPolicy Bypass -File tools/package.ps1
 
 # macOS / Linux
-git archive --format=zip --output copy-as-markdown-v1.0.0.zip HEAD:extension
+git archive --format=zip --output copy-as-markdown.zip HEAD:extension
 ```
 
 Both zip the committed contents of `extension/`, with `manifest.json` at the

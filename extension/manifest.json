@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Copy as Markdown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Copy any webpage or selected text as clean Markdown, ready to paste into Obsidian, Notion, or GitHub.",
   "permissions": ["activeTab", "scripting", "contextMenus", "clipboardWrite"],
   "icons": {
