@@ -1,0 +1,82 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}html,body{margin:0;width:1280px;height:800px;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;background:#e8eaf0}
+.cap{height:72px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600;letter-spacing:.2px}
+.win{position:absolute;top:72px;left:0;right:0;bottom:0;display:flex;flex-direction:column;background:#fff}
+.tabs{height:38px;background:#dfe3ea;display:flex;align-items:flex-end;padding:0 10px}
+.tab{background:#fff;height:32px;width:260px;border-radius:8px 8px 0 0;display:flex;align-items:center;padding:0 12px;font-size:12.5px;color:#333;gap:8px;white-space:nowrap;overflow:hidden}
+.tab i{width:14px;height:14px;border-radius:3px;background:#2b2420;flex:none}
+.bar{height:44px;display:flex;align-items:center;gap:14px;padding:0 14px;border-bottom:1px solid #e2e2e2}
+.nav{color:#777;font-size:18px;width:18px;text-align:center}
+.url{flex:1;height:30px;background:#f1f3f4;border-radius:15px;display:flex;align-items:center;padding:0 16px;font-size:13.5px;color:#444}
+.url b{font-weight:400;color:#888}
+.ext{position:relative;width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.ext.on{background:#e3e7ee}.ext img{width:18px;height:18px}
+.badge{position:absolute;right:-2px;bottom:0;background:#1a7f37;color:#fff;font-size:9.5px;font-weight:700;border-radius:3px;padding:0 3px;line-height:13px}
+.dots{color:#666;font-size:18px;letter-spacing:1px}
+.view{flex:1;position:relative;overflow:hidden}
+.view iframe{border:0;width:100%;height:100%}
+.popup{position:absolute;top:118px;right:56px;width:246px;height:122px;border:0;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.08);background:#fff}
+.split{display:flex;height:100%}
+.split>.l{width:600px;position:relative;overflow:hidden;border-right:1px solid #ddd}
+.split>.l iframe{width:1000px;height:1077px;transform:scale(.6);transform-origin:0 0;position:absolute}
+.split>.r{flex:1;background:#1e1e1e;color:#d4d4d4;display:flex;flex-direction:column}
+.r .hd{height:34px;background:#2d2d2d;font-size:12.5px;color:#aaa;display:flex;align-items:center;padding:0 16px;gap:8px}
+.r pre{margin:0;padding:16px 22px;font:13px/1.55 Consolas,"Cascadia Mono","DejaVu Sans Mono",monospace;white-space:pre-wrap;word-break:break-word;flex:1;overflow:hidden}
+.r .h{color:#569cd6;font-weight:600}.r .lk{color:#ce9178}.r .t{color:#b5cea8}.r .q{color:#6a9955}
+.label{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:3px 9px;border-radius:10px;z-index:2}
+.menu{position:absolute;width:280px;background:#fff;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.08);padding:6px 0;font-size:13.5px;color:#222}
+.menu div{height:32px;display:flex;align-items:center;padding:0 14px;gap:10px}
+.menu div span{margin-left:auto;color:#888;font-size:12px}
+.menu .sel{background:#e8effd}.menu hr{border:0;border-top:1px solid #e5e5e5;margin:5px 0}
+.menu img{width:16px;height:16px}.menu .pad{width:16px}
+</style></head><body>
+<div class="cap" id="cap"></div>
+<div class="win">
+  <div class="tabs"><div class="tab"><i></i>A Practical Guide to Pour-Over Coffee</div></div>
+  <div class="bar"><span class="nav">←</span><span class="nav">→</span><span class="nav">⟳</span>
+    <div class="url">theslowcup.example<b>/guides/pour-over</b></div>
+    <div class="ext" id="ext"><img src="/ext/icons/icon32.png"><span class="badge" id="badge" hidden>✓</span></div><span class="dots">⋯</span></div>
+  <div class="view" id="view"></div>
+</div>
+<script>
+const shot = new URLSearchParams(location.search).get('shot');
+const view = document.getElementById('view'), cap = document.getElementById('cap');
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function hl(md){return md.split('\n').map(l=>{l=esc(l);
+  if(/^#{1,6} /.test(l))return `<span class="h">${l}</span>`;
+  if(/^&gt; /.test(l))return `<span class="q">${l}</span>`;
+  if(/^\|/.test(l))return `<span class="t">${l}</span>`;
+  return l.replace(/(\]\()([^)]+)(\))/g,'$1<span class="lk">$2</span>$3');}).join('\n');}
+window.ready = (async () => {
+  if (shot === '1') {
+    cap.textContent = 'Copy any web page as clean Markdown in one click';
+    view.innerHTML = '<iframe src="/guides/pour-over"></iframe>';
+    document.getElementById('ext').classList.add('on');
+    const pop = document.createElement('iframe'); pop.className='popup'; pop.src='/ext/popup.html';
+    document.body.appendChild(pop);
+    await new Promise(r=>pop.onload=r);
+    pop.contentDocument.getElementById('status').textContent = window.STATUS;
+  } else if (shot === '2') {
+    cap.textContent = 'Just the article: no menus, sidebars or cookie banners';
+    view.innerHTML = `<div class="split"><div class="l"><span class="label">The page</span><iframe src="/guides/pour-over"></iframe></div>
+      <div class="r"><div class="hd">What you paste</div><pre>${hl(window.PAGE_MD)}</pre></div></div>`;
+    await new Promise(r=>view.querySelector('iframe').onload=r);
+  } else {
+    cap.textContent = 'Highlight part of a page to copy just that part';
+    view.innerHTML = '<iframe src="/guides/pour-over"></iframe>';
+    const f = view.querySelector('iframe'); await new Promise(r=>f.onload=r);
+    const d = f.contentDocument, w = f.contentWindow;
+    d.querySelector('.cookie').remove();
+    w.scrollTo(0, 290);
+    const h = [...d.querySelectorAll('h2')].find(e=>e.textContent==='Ratios that work');
+    const rg = d.createRange(); rg.setStartBefore(h); rg.setEndAfter(d.querySelector('table'));
+    w.getSelection().removeAllRanges(); w.getSelection().addRange(rg); w.focus();
+    const tb = d.querySelector('table').getBoundingClientRect();
+    const m = document.createElement('div'); m.className='menu';
+    m.style.left = (tb.left + 240) + 'px'; m.style.top = (72 + 38 + 44 + tb.top + 40) + 'px';
+    m.innerHTML = `<div><i class="pad"></i>Copy<span>Ctrl+C</span></div><div class="sel"><img src="/ext/icons/icon32.png">Copy as Markdown</div>
+      <hr><div><i class="pad"></i>Search the web</div><div><i class="pad"></i>Print<span>Ctrl+P</span></div><hr><div><i class="pad"></i>Inspect</div>`;
+    document.body.appendChild(m);
+  }
+})();
+</script></body></html>
