@@ -1,10 +1,11 @@
-// Generates the extension icons and the Chrome Web Store promo tile with no
+// Generates the extension icons and the store images (Edge Add-ons logo,
+// small promo tile) with no
 // image editor and no dependencies. Run: node tools/make-icons.js
 //
 // Draws a rounded square with a white "M" and a downward arrow — the Markdown
 // idiom — supersampled 4x so the small sizes stay smooth.
 //
-// Icons go to extension/icons/ (they ship). The promo tile goes to store/,
+// Icons go to extension/icons/ (they ship). Store images go to store/,
 // which must NOT be included in the uploaded zip.
 
 const fs = require("fs");
@@ -128,8 +129,8 @@ function drawIcon(size) {
   return downsample(c, size, size);
 }
 
-// Chrome Web Store small promo tile: optional for a listing, but required for
-// the extension to be considered for featuring.
+// Small promo tile (440x280): optional on both Edge Add-ons and the Chrome Web
+// Store, but needed to be considered for featuring.
 function drawPromoTile(w, h) {
   const c = makeCanvas(w * SS, h * SS);
   fillRect(c, 0, 0, c.w, c.h, BG);
@@ -204,3 +205,5 @@ for (const size of ICON_SIZES) {
   write(path.join(iconDir, `icon${size}.png`), encodePng(drawIcon(size), size, size));
 }
 write(path.join(storeDir, "promo-tile-440x280.png"), encodePng(drawPromoTile(440, 280), 440, 280));
+// Edge Add-ons store logo: 1:1, 300x300 recommended.
+write(path.join(storeDir, "edge-logo-300x300.png"), encodePng(drawIcon(300), 300, 300));

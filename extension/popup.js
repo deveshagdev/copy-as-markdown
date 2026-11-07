@@ -4,9 +4,10 @@ const statusEl = document.getElementById("status");
 // defines. Chrome injects these in array order, and nothing else enforces it.
 const SCRIPTS = ["turndown.js", "content.js"];
 
-// Pages Chrome refuses to let any extension touch. Worth naming explicitly,
-// because it's the one failure with a cause we can actually explain.
-const RESTRICTED_URL = /^(chrome|edge|about|devtools|chrome-extension|moz-extension):|^https:\/\/chromewebstore\.google\.com/;
+// Pages the browser refuses to let any extension touch: internal pages and the
+// Chrome and Edge extension stores. Worth naming explicitly, because it's the
+// one failure with a cause we can actually explain.
+const RESTRICTED_URL = /^(chrome|edge|about|devtools|chrome-extension|extension|moz-extension):|^https:\/\/(chromewebstore\.google\.com|chrome\.google\.com\/webstore|microsoftedge\.microsoft\.com\/addons)/;
 
 function setStatus(text) {
   statusEl.textContent = text;
@@ -36,7 +37,7 @@ async function copyAsMarkdown() {
     console.error("Copy as Markdown:", error);
     setStatus(
       RESTRICTED_URL.test(tab.url || "")
-        ? "Chrome doesn't allow extensions to run on this page."
+        ? "Your browser doesn't allow extensions to run on this page."
         : "Couldn't copy from this page. See the console for details."
     );
   }
